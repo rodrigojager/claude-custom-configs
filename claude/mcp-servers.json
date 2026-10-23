@@ -1,11 +1,5 @@
 {
   "mcpServers": {
-    "wmux": {
-      "command": "node",
-      "args": [
-        "C:\\Users\\Rodrigo\\AppData\\Local\\wmux\\app-2.9.1\\resources\\mcp-bundle\\index.js"
-      ]
-    },
     "zvec_grep": {
       "type": "stdio",
       "command": "zg",

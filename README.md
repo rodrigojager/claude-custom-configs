@@ -31,7 +31,7 @@ O que ele faz, nesta ordem:
 5. Instala os plugins: claude-hud, claude-mermaid, plannotator e roles.
 6. Instala as ferramentas que faltarem: CLI do plannotator (instalador oficial),
    zvec-grep (npm) e deja-vu (última versão, com checksum conferido, no PATH do usuário).
-7. Configura os MCPs: zvec_grep, deja e, se o wmux estiver instalado, wmux.
+7. Configura os MCPs: zvec_grep e deja.
 
 Depois: abrir um terminal novo, entrar no Claude Code (cada pessoa com a própria
 conta) e rodar `deja index` para indexar as sessões antigas.
@@ -93,7 +93,6 @@ claude-roles (pasta `statusline/`). Copie o conteúdo dessa pasta para
 ```
 claude mcp add -s user zvec_grep -- zg server --stdio
 claude mcp add -s user deja -- cmd /c D:\tools\deja-vu\deja.exe mcp
-claude mcp add -s user wmux -- node C:\Users\Rodrigo\AppData\Local\wmux\app-2.9.1\resources\mcp-bundle\index.js
 ```
 
 - **zvec-grep** (`zg`, pacote npm `@zvec/zvec-grep` instalado globalmente): busca
@@ -106,7 +105,6 @@ claude mcp add -s user wmux -- node C:\Users\Rodrigo\AppData\Local\wmux\app-2.9.
   Os hooks do `settings.json` vêm de `deja install claude-auto`, que também cria
   `~/.claude/commands/deja.md` e a skill `deja-history`. Para ler o OpenCode ele
   precisa de um `sqlite3` com funções JSON (`D:\tools\sqlite`, à frente no PATH).
-- **wmux**: servidor do app wmux.
 
 **Herdr:** o hook `~/.claude/hooks/herdr-agent-state.ps1` é instalado e
 atualizado pela integração do próprio Herdr com o Claude, por isso não está aqui.

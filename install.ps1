@@ -205,13 +205,6 @@ Act 'zvec_grep' {
 Act 'deja (deja install claude-code: MCP and its skill; the hooks are already in settings.json)' {
   & $deja install claude-code --no-index | Out-Host
 }
-$wmux = Get-ChildItem (Join-Path $env:LOCALAPPDATA 'wmux\app-*\resources\mcp-bundle\index.js') -ErrorAction SilentlyContinue |
-  Sort-Object FullName -Descending | Select-Object -First 1
-if ($wmux) {
-  Act "wmux ($($wmux.FullName))" {
-    if (-not (Has-Mcp 'wmux')) { claude mcp add -s user wmux -- node $wmux.FullName | Out-Host }
-  }
-}
 
 Say 'Done'
 if ($DryRun) { Write-Host '    Dry run: nothing was changed.' }
