@@ -4,6 +4,41 @@ Minha configuração do Claude Code (CLI, Windows): mods, status line, atalhos e
 as ferramentas que eles usam. Credenciais e tokens não estão aqui: o
 `~/.claude.json` fica de fora, e dele só a lista de servidores MCP foi extraída.
 
+## Instalar igual (outra máquina ou outra pessoa)
+
+Com Git for Windows, Node.js e Claude Code instalados, num PowerShell:
+
+```powershell
+irm https://raw.githubusercontent.com/rodrigojager/claude-custom-configs/main/install.ps1 | iex
+```
+
+Para ver antes o que ele faria, ou pôr ferramentas e caches em outro lugar
+(o padrão é `~/.claude/tools` e `~/.claude/cache`):
+
+```powershell
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/rodrigojager/claude-custom-configs/main/install.ps1))) -DryRun
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/rodrigojager/claude-custom-configs/main/install.ps1))) -ToolsDir D:\tools -CacheDir D:\claude-cache
+```
+
+O que ele faz, nesta ordem:
+
+1. Clona (ou atualiza) este repositório e o [claude-roles](https://github.com/rodrigojager/claude-roles) em `~/.claude/repos/`.
+2. Guarda uma cópia de cada arquivo que vai substituir em `~/.claude/backups/setup-<data>/`.
+3. Escreve o `settings.json` com os caminhos da máquina (`setup/apply-settings.mjs`);
+   o hook do Herdr só entra se o Herdr estiver instalado.
+4. Acrescenta o `Alt+R` ao `keybindings.json` e o bloco do zvec-grep ao `CLAUDE.md`,
+   mantendo o que já houver neles; copia o layout do claude-hud e o wrapper da status line.
+5. Instala os plugins: claude-hud, claude-mermaid, plannotator e roles.
+6. Instala as ferramentas que faltarem: CLI do plannotator (instalador oficial),
+   zvec-grep (npm) e deja-vu (última versão, com checksum conferido, no PATH do usuário).
+7. Configura os MCPs: zvec_grep, deja e, se o wmux estiver instalado, wmux.
+
+Depois: abrir um terminal novo, entrar no Claude Code (cada pessoa com a própria
+conta) e rodar `deja index` para indexar as sessões antigas.
+
+Vale revisar no `settings.json`: modelo `opus` com esforço `xhigh`,
+`skipDangerousModePermissionPrompt: true` e a permissão já liberada para o zvec-grep.
+
 ## O que está aqui
 
 | Arquivo | Vai para | O que é |
@@ -15,8 +50,7 @@ as ferramentas que eles usam. Credenciais e tokens não estão aqui: o
 | `claude/mcp-servers.json` | (referência) | Servidores MCP do escopo do usuário |
 | `herdr/config.toml` | `%APPDATA%\herdr\config.toml` | Herdr, com a linha `$model_info` do Claude |
 
-`restore.ps1` copia os arquivos da tabela para o lugar, guardando um backup
-`.bak-<data>` de cada arquivo substituído (`.\restore.ps1 -WhatIf` mostra antes).
+Os caminhos nos arquivos são os da minha máquina; o `install.ps1` os reescreve.
 
 ## Peças instaladas
 
