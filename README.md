@@ -1,0 +1,75 @@
+# claude-custom-configs
+
+Minha configuração do Claude Code (CLI, Windows): mods, status line, atalhos e
+as ferramentas que eles usam. Credenciais e tokens não estão aqui: o
+`~/.claude.json` fica de fora, e dele só a lista de servidores MCP foi extraída.
+
+## O que está aqui
+
+| Arquivo | Vai para | O que é |
+| --- | --- | --- |
+| `claude/settings.json` | `~/.claude/settings.json` | Modelo e esforço, plugins e marketplaces, hooks (deja e Herdr), status line com `refreshInterval: 1`, caches do npm e do Puppeteer no D: |
+| `claude/keybindings.json` | `~/.claude/keybindings.json` | `Alt+R` abre o `/role` |
+| `claude/CLAUDE.md` | `~/.claude/CLAUDE.md` | Instruções globais do zvec-grep |
+| `claude/plugins/claude-hud/config.json` | `~/.claude/plugins/claude-hud/config.json` | Layout do claude-hud (ordem, agrupamentos, elementos ligados) |
+| `claude/mcp-servers.json` | (referência) | Servidores MCP do escopo do usuário |
+| `herdr/config.toml` | `%APPDATA%\herdr\config.toml` | Herdr, com a linha `$model_info` do Claude |
+
+`restore.ps1` copia os arquivos da tabela para o lugar, guardando um backup
+`.bak-<data>` de cada arquivo substituído (`.\restore.ps1 -WhatIf` mostra antes).
+
+## Peças instaladas
+
+**Plugins** (os marketplaces já estão no `settings.json`):
+
+```
+/plugin install claude-hud@claude-hud
+/plugin install claude-mermaid@claude-mermaid
+/plugin install plannotator@plannotator
+/plugin install roles --marketplace rodrigojager/claude-roles
+```
+
+- [claude-hud](https://github.com/jarrodwatts/claude-hud): status line.
+- [claude-mermaid](https://github.com/veelenga/claude-mermaid): diagramas Mermaid com preview.
+  Baixa Puppeteer e Chrome; o `env` do `settings.json` manda esses caches para `D:\claude-cache`.
+- [plannotator](https://github.com/backnotprop/plannotator): revisão de planos e código no navegador.
+  Precisa também do programa `plannotator` no PATH (instalador do próprio projeto),
+  que cria as skills `plannotator*` em `~/.claude/skills`.
+- [claude-roles](https://github.com/rodrigojager/claude-roles): roles profissionais (`/role`).
+
+**Status line com a role:** o `statusLine` aponta para
+`~/.claude/roles-mod/statusline.cmd`, o wrapper do claude-hud que vem no
+claude-roles (pasta `statusline/`). Copie essa pasta para `~/.claude/roles-mod/`.
+
+**Servidores MCP** (`claude/mcp-servers.json`):
+
+```
+claude mcp add -s user zvec_grep -- zg server --stdio
+claude mcp add -s user deja -- cmd /c D:\tools\deja-vu\deja.exe mcp
+claude mcp add -s user wmux -- node C:\Users\Rodrigo\AppData\Local\wmux\app-2.9.1\resources\mcp-bundle\index.js
+```
+
+- **zvec-grep** (`zg`, pacote npm `@zvec/zvec-grep` instalado globalmente): busca
+  semântica no workspace. O `CLAUDE.md` traz as regras de uso, e a permissão
+  `mcp__zvec_grep__*` já está liberada no `settings.json`.
+- **deja-vu** (`deja` 0.23, binário em `D:\tools\deja-vu`, no PATH do usuário):
+  busca nas sessões antigas de todos os agentes. O índice fica em
+  `~\.cache\deja`, que é uma junction para `D:\claude-cache\deja`
+  (`New-Item -ItemType Junction -Path $HOME\.cache\deja -Target D:\claude-cache\deja`).
+  Os hooks do `settings.json` vêm de `deja install claude-auto`, que também cria
+  `~/.claude/commands/deja.md` e a skill `deja-history`. Para ler o OpenCode ele
+  precisa de um `sqlite3` com funções JSON (`D:\tools\sqlite`, à frente no PATH).
+- **wmux**: servidor do app wmux.
+
+**Herdr:** o hook `~/.claude/hooks/herdr-agent-state.ps1` é instalado e
+atualizado pela integração do próprio Herdr com o Claude, por isso não está aqui.
+A linha `claude = [...]` em `rows_by_agent` mostra o `$model_info` (modelo,
+esforço e role) que o wrapper da status line envia.
+
+## Notas
+
+- O disco C: está quase cheio; caches e ferramentas grandes ficam no D:
+  (`D:\claude-cache`, `D:\tools`).
+- `refreshInterval: 1` faz a troca de role aparecer na hora na status line; o
+  wrapper reaproveita a saída do claude-hud entre mensagens, então cada
+  atualização custa só o arranque do Node.

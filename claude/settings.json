@@ -1,0 +1,144 @@
+{
+  "env": {
+    "npm_config_cache": "D:\\claude-cache\\npm-cache",
+    "PUPPETEER_CACHE_DIR": "D:\\claude-cache\\puppeteer"
+  },
+  "permissions": {
+    "allow": [
+      "mcp__zvec_grep__*"
+    ]
+  },
+  "model": "opus",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "^(startup|resume|clear|compact|fork)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\Rodrigo\\.claude\\hooks\\herdr-agent-state.ps1\" session",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "D:/tools/deja-vu/deja.exe hook-context",
+            "statusMessage": "Recalling past sessions…"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "D:/tools/deja-vu/deja.exe hook-tool-after",
+            "statusMessage": "Checking what fixed this before…"
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "D:/tools/deja-vu/deja.exe hook-tool-after",
+            "statusMessage": "Checking what fixed this before…"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "manual|auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "D:/tools/deja-vu/deja.exe hook-precompact",
+            "statusMessage": "Saving this session to memory…"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell|Edit|Write|MultiEdit|NotebookEdit|Task|Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "D:/tools/deja-vu/deja.exe hook-tool",
+            "statusMessage": "Checking what this touches…"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "D:/tools/deja-vu/deja.exe hook-session-end",
+            "statusMessage": "Marking this session as ended…"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "D:/tools/deja-vu/deja.exe hook-prompt",
+            "statusMessage": "Searching past sessions…"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "exec \"${CLAUDE_CONFIG_DIR:-$HOME/.claude}/roles-mod/statusline.cmd\"",
+    "refreshInterval": 1
+  },
+  "enabledPlugins": {
+    "claude-hud@claude-hud": true,
+    "claude-mermaid@claude-mermaid": true,
+    "plannotator@plannotator": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-hud": {
+      "source": {
+        "source": "github",
+        "repo": "jarrodwatts/claude-hud"
+      }
+    },
+    "claude-mermaid": {
+      "source": {
+        "source": "github",
+        "repo": "veelenga/claude-mermaid"
+      }
+    },
+    "plannotator": {
+      "source": {
+        "source": "github",
+        "repo": "backnotprop/plannotator"
+      }
+    }
+  },
+  "effortLevel": "xhigh",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "xhigh"
+    }
+  },
+  "autoUpdatesChannel": "latest",
+  "tui": "fullscreen",
+  "skipDangerousModePermissionPrompt": true
+}
