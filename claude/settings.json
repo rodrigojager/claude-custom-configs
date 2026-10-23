@@ -110,7 +110,8 @@
   "enabledPlugins": {
     "claude-hud@claude-hud": true,
     "claude-mermaid@claude-mermaid": true,
-    "plannotator@plannotator": true
+    "plannotator@plannotator": true,
+    "roles@claude-roles": true
   },
   "extraKnownMarketplaces": {
     "claude-hud": {
@@ -129,6 +130,12 @@
       "source": {
         "source": "github",
         "repo": "backnotprop/plannotator"
+      }
+    },
+    "claude-roles": {
+      "source": {
+        "source": "directory",
+        "path": "C:\\Users\\Rodrigo\\.claude\\repos\\claude-roles"
       }
     }
   },

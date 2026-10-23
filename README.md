@@ -26,8 +26,20 @@ as ferramentas que eles usam. Credenciais e tokens não estão aqui: o
 /plugin install claude-hud@claude-hud
 /plugin install claude-mermaid@claude-mermaid
 /plugin install plannotator@plannotator
-/plugin install roles --marketplace rodrigojager/claude-roles
 ```
+
+O `roles` é meu e é lido direto da cópia de trabalho, que fica em
+`~/.claude/repos/` (o mesmo esquema do `~/.codex` do Codex). O `settings.json`
+já declara esse marketplace local; para recriar a pasta:
+
+```
+git clone https://github.com/rodrigojager/claude-roles $HOME\.claude\repos\claude-roles
+claude plugin marketplace add $HOME\.claude\repos\claude-roles
+claude plugin install roles@claude-roles --scope user
+```
+
+Editando essa pasta, `/reload-plugins` aplica a mudança sem reinstalar.
+Este repositório também mora em `~/.claude/repos/claude-custom-configs`.
 
 - [claude-hud](https://github.com/jarrodwatts/claude-hud): status line.
 - [claude-mermaid](https://github.com/veelenga/claude-mermaid): diagramas Mermaid com preview.
@@ -39,7 +51,8 @@ as ferramentas que eles usam. Credenciais e tokens não estão aqui: o
 
 **Status line com a role:** o `statusLine` aponta para
 `~/.claude/roles-mod/statusline.cmd`, o wrapper do claude-hud que vem no
-claude-roles (pasta `statusline/`). Copie essa pasta para `~/.claude/roles-mod/`.
+claude-roles (pasta `statusline/`). Copie o conteúdo dessa pasta para
+`~/.claude/roles-mod/`.
 
 **Servidores MCP** (`claude/mcp-servers.json`):
 
